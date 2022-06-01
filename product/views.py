@@ -41,34 +41,35 @@ class ProductDetail(APIView):
         return Response(serializer.data)
 
 
-class LoginAPI(APIView):
-
-    def post(self, request):
-        user = authenticate(
-            request,
-            username=request.data['email'].lower(),
-            password=request.data['password']
-        )
-        if user is None:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-        CustomUser.objects.filter(id=user.id).update(last_login=timezone.now())
-        user_data = CustomUserSerializer(user, context={'request': request}).data
-        return Response(status=status.HTTP_200_OK, data={'data': user_data,
-                                                         'token': get_jwt_auth_token(user)})
-
-
-class LogoutAPI(APIView):
-
-    def user_logout(self, request):
-        logout(request)
-        return Response(status=status.HTTP_200_OK)
-
-
-class SignInAPI(APIView):
-
-    def post(self, request):
-        serializer = CustomUserSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# class LoginAPI(APIView):
+#
+#     def post(self, request):
+#         user = authenticate(
+#             request,
+#             username=request.data['email'].lower(),
+#             password=request.data['password']
+#         )
+#         if user is None:
+#             return Response(status=status.HTTP_401_UNAUTHORIZED)
+#         CustomUser.objects.filter(id=user.id).update(last_login=timezone.now())
+#         user_data = CustomUserSerializer(user, context={'request': request}).data
+#         return Response(status=status.HTTP_200_OK, data={'data': user_data,
+#                                                          'token': get_jwt_auth_token(user)})
+#
+#
+# class LogoutAPI(APIView):
+#
+#     def user_logout(self, request):
+#         logout(request)
+#         return Response(status=status.HTTP_200_OK)
+#
+#
+# class SignInAPI(APIView):
+#
+#     def post(self, request):
+#         serializer = CustomUserSerializer(data=request.data, context={'request': request})
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(status=status.HTTP_200_OK)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#
